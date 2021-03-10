@@ -4,13 +4,14 @@
             <div class="container-title">
                 <img src='../assets/todolist-logo.png'>
                 <h1>Список задач</h1>
+                <LikeBtn></LikeBtn>
             </div>
             <div class="container-body">
                 <div class="wrapper">
                     <div class="list">
                         <div class="item" :class="{ done: task.done }" v-for="task in tasks" :key="task.text.tasks">
                             <input type="checkbox" v-model="task.done">
-                            {{ task.text }}
+                            {{ task.text }} <LikeBtn></LikeBtn>
                         </div>
                     </div>
                     <div class="form">
@@ -24,13 +25,13 @@
                         <div class="message-info" v-else>Осталось сделать задач: <span class="counter">{{ count() }}</span></div>
                         <img class="img-tasks-done" src="https://pngimage.net/wp-content/uploads/2018/06/yes-emoji-png-4.png" alt="" v-show="count() == 0">
                     </div>
-                    <div class="author">
-                        <span>by T. Kharitonov</span>
-                        <div class="social">
-                            <a href="https://github.com/bykharitonoff"><img src="../assets/github.svg" alt=""></a>
-                            <a href="https://t.me/bytim"><img src="../assets/telegram.svg" alt=""></a>
-                        </div>
-                    </div>
+<!--                    <div class="author">-->
+<!--                        <span>by T. Kharitonov</span>-->
+<!--                        <div class="social">-->
+<!--                            <a href="https://github.com/bykharitonoff"><img src="../assets/github.svg" alt=""></a>-->
+<!--                            <a href="https://t.me/bytim"><img src="../assets/telegram.svg" alt=""></a>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>
@@ -38,8 +39,13 @@
 </template>
 
 <script>
+    import LikeBtn from './LikeBtn.vue'
+
     export default {
         name: "TodoList",
+        components: {
+            LikeBtn
+        },
         data() {
             return {
                 message: '',
