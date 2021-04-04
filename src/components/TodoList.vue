@@ -9,29 +9,21 @@
             <div class="container-body">
                 <div class="wrapper">
                     <div class="list">
-                        <div class="item" :class="{ done: task.done }" v-for="task in tasks" :key="task.text.tasks">
-                            <input type="checkbox" v-model="task.done">
-                            {{ task.text }} <LikeBtn></LikeBtn>
+                        <div class="item" :class="{ done: task.done }" v-for="(task, index) in tasks" :key="task.text.tasks">
+                            <input type="checkbox" :id="index" v-model="task.done">
+                            <label :for="index">{{ task.text }}</label> <LikeBtn></LikeBtn>
                         </div>
                     </div>
                     <div class="form">
                         <input class="input input-add-task" v-model="message" v-on:keyup.enter="addTask" placeholder="Введите текст...">
                         <button class="btn btn-add-task" type="button" @click="addTask">Добавить</button>
                     </div>
-                    <!-- Есть 2 метода скрыть/показать элементы на стр: через циклы или через v-show (остается в DOM благодря display: none;) -->
                     <div class="message-count-task">
                         <div class="message-info message-tasks-done" v-if="count() == 0">Все задания выполнены!</div>
                         <div class="message-info" v-else-if="count() == 1">Осталась одна задача</div>
                         <div class="message-info" v-else>Осталось сделать задач: <span class="counter">{{ count() }}</span></div>
                         <img class="img-tasks-done" src="https://pngimage.net/wp-content/uploads/2018/06/yes-emoji-png-4.png" alt="" v-show="count() == 0">
                     </div>
-<!--                    <div class="author">-->
-<!--                        <span>by T. Kharitonov</span>-->
-<!--                        <div class="social">-->
-<!--                            <a href="https://github.com/bykharitonoff"><img src="../assets/github.svg" alt=""></a>-->
-<!--                            <a href="https://t.me/bytim"><img src="../assets/telegram.svg" alt=""></a>-->
-<!--                        </div>-->
-<!--                    </div>-->
                 </div>
             </div>
         </div>
@@ -62,11 +54,25 @@
                      text: this.message,
                      done: false
                  });
-                 this.message = ''
+                 this.message = '';
              },
             count() {
-                 return this.tasks.filter(task => !task.done).length;
+                return this.tasks.filter(task => !task.done).length;
             }
+        },
+        mounted() {
+            // Сохраняем в localStorage добавленные задачи
+            console.log('App mounted!');
+            if (localStorage.getItem('tasks')) this.tasks = JSON.parse(localStorage.getItem('tasks'));
+        },
+        watch: {
+            tasks: {
+                handler() {
+                    console.log('tasks changed!');
+                    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+                },
+                deep: true,
+            },
         }
     }
 </script>
@@ -88,14 +94,22 @@
         margin: 10px 0;
         display: flex;
         align-items: center;
+        cursor: pointer;
+    }
+    .item:hover {
+        color: #0097ff;
     }
     .item input {
         margin-right: 5px;
+        cursor: pointer;
+    }
+    .item label {
+        cursor: pointer;
     }
     .form {
         margin: 20px 0 7px 0;
     }
-    .done {
+    .done label {
         text-decoration: line-through;
     }
     .img-tasks-done {

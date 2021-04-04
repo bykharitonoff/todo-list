@@ -16,5 +16,6 @@
 <style scoped>
     button {
         margin-left: 5px;
+        cursor: pointer;
     }
 </style>
